@@ -9,7 +9,8 @@ export async function getProducts() {
         const products = await prisma.product.findMany({
             orderBy: { createdAt: 'desc' },
         });
-        return products.map((product) => ({
+
+        return products.map((product: typeof products[number]) => ({
             ...product,
             price: product.price.toNumber(),
         }));
@@ -29,6 +30,7 @@ export async function createProduct(data: ProductSchema) {
         await prisma.product.create({
             data: result.data,
         });
+
         revalidatePath('/admin');
         return { success: true };
     } catch (error) {
@@ -48,6 +50,7 @@ export async function updateProduct(id: number, data: ProductSchema) {
             where: { id },
             data: result.data,
         });
+
         revalidatePath('/admin');
         return { success: true };
     } catch (error) {
@@ -60,6 +63,7 @@ export async function deleteProduct(id: number) {
         await prisma.product.delete({
             where: { id },
         });
+
         revalidatePath('/admin');
         return { success: true };
     } catch (error) {
